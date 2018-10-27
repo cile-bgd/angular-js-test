@@ -5,6 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Angular Example</title>
+        <link rel="icon" href="./favicon.ico" type="image/x-icon">
         <link rel="stylesheet" href="./node_modules/bootstrap3/dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="./node_modules/bootstrap3/dist/css/bootstrap-theme.min.css" />
     </head>
@@ -15,20 +16,22 @@
                 <div class="col-sm-3 col-md-3">
                     <h3>Categories</h3>
                     <div class="bar">
-                        <input type="text" class="form-control" placeholder="Search applets" ng-model="search" />
+                        <input type="text" class="form-control" placeholder="Search applets" ng-model="searchString" />
                     </div>
                     <br />
-                    <ul class="list-group">
-                        <li ng-repeat="category in categories" class="list-group-item">
+                    <div class="list-group categories">
+                        <a href="" ng-repeat="category in categories | filter:searchString" class="list-group-item list-group-item-action" 
+                            ng-class="{active : activeCategory === category}" ng-click="showApplets(category)">
                             <span class="badge">{{category.value}}</span>
-                            <a href="#">{{category.category}}</a>
-                        </li>
-                    </ul>
+                            {{category.category}}
+                        </a>
+                    </div>
                 </div>
                 <div class="col-sm-9 col-md-9">
                     <h3>Applets</h3>
-                    <div class="well">...</div>
-                    <div class="well">...</div>
+                    <div class="applets">
+                        <div class="well" ng-repeat="applet in applets | filter:searchString">{{applet}}</div>
+                    </div>
                 </div>
             </div>
         </div>

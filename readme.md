@@ -1,4 +1,4 @@
-### InvestiCloud AngularJS Coding Test
+# InvestiCloud AngularJS Coding Test
 
 To set, download and run `npm install`.
 
