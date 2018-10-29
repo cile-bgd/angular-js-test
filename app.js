@@ -2,7 +2,7 @@ angular.module("App",['main']);
 
 angular.module("main",[]);
 
-angular.module("main").controller("mainController",function($scope){
+angular.module("main").controller("mainController", function($scope, $window) {
     const lib = {
         categories: ['Performance', 'Investments', 'Operations'],
         applets: [
@@ -97,6 +97,52 @@ angular.module("main").controller("mainController",function($scope){
             default:
                 console.error(`Uuups!`);
                 return null;
+        }
+    }
+
+    // search box
+    $scope.appletNames = lib.applets.map(x => x.name);
+    $scope.searchApplets = search;
+    let foundApplets = [];
+
+    function search () {
+        if ($scope.searchString.length === 0) {
+            // reload page
+            $window.location.reload();
+        }
+        if ($scope.searchString.length > 2) {
+            foundApplets = $scope.appletNames.filter(search => search.toLowerCase().includes($scope.searchString.toLowerCase()));
+        }
+
+        if (foundApplets.length > 0) {
+            // reset values
+            $scope.categories = null;
+            categoriesArray.length = 0;
+            performanceAppletCount = 0;
+            investmentsAppletCount = 0;
+            operationsAppletCount = 0;
+
+            // get categories and category counts from the search
+            foundApplets.forEach(function (applet) {
+                for (let i = 0; i < lib.applets.length; i++) {
+                    if (lib.applets[i].name === applet) {
+                        for (let j = 0; j < lib.applets[i].categories.length; j++) {
+                            if (lib.applets[i].categories[j] === 'Performance') {
+                                performanceAppletCount++;
+                                categoriesArray.push(new categories(lib.applets[i].categories[j], performanceAppletCount));
+                            } else if (lib.applets[i].categories[j] === 'Investments') {
+                                investmentsAppletCount++;
+                                categoriesArray.push(new categories(lib.applets[i].categories[j], investmentsAppletCount));
+                            } else if (lib.applets[i].categories[j] === 'Operations') {
+                                operationsAppletCount++;
+                                categoriesArray.push(new categories(lib.applets[i].categories[j], operationsAppletCount));
+                            }
+                        }
+                    }
+                }
+            });
+
+            $scope.categories = categoriesArray;
         }
     }
 });
